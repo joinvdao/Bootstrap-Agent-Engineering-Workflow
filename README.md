@@ -1,6 +1,6 @@
-# Agent Bootstrap Prompt
+# Bootstrap Agent Engineering Workflow
 
-A reusable agentic engineering bootstrap prompt for setting up AI-assisted software repositories before feature implementation begins.
+A reusable agentic engineering bootstrap workflow for setting up AI-assisted software repositories before feature implementation begins.
 
 This is a public VDAO.io community resource. It is designed for Codex, Claude, Cline, Qwen Code, GLM, MiniMax, or another capable coding agent.
 
