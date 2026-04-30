@@ -1,0 +1,29 @@
+name: Feature Request
+description: Propose a public improvement to the bootstrap prompt or generated repo workflow.
+title: "[feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Or Opportunity
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Direction
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy Check
+      options:
+        - label: This can be discussed in a public open-source repository.
+          required: true

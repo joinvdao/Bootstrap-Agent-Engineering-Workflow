@@ -1,0 +1,14 @@
+.agent-ready-report.json
+node_modules/
+.next/
+dist/
+build/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+private-notes/
+local-planning/

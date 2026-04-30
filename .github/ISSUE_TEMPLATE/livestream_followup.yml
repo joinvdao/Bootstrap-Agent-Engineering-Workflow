@@ -1,0 +1,30 @@
+name: Livestream Follow-Up
+description: Capture public work or notes from a community build session.
+title: "[livestream] "
+labels:
+  - livestream
+body:
+  - type: input
+    id: stream_date
+    attributes:
+      label: Livestream Date
+      placeholder: "2026-04-30"
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Public Notes
+    validations:
+      required: true
+  - type: textarea
+    id: followups
+    attributes:
+      label: Follow-Up Work
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy Check
+      options:
+        - label: These notes are safe for the public repo.
+          required: true

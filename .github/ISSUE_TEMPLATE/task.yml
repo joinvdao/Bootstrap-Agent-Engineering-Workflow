@@ -1,0 +1,37 @@
+name: Engineering Task
+description: Define scoped implementation or maintenance work.
+title: "[task] "
+labels:
+  - task
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation Plan
+  - type: checkboxes
+    id: ready
+    attributes:
+      label: Agent-Ready Checklist
+      options:
+        - label: The task is public-safe.
+          required: true
+        - label: The scope is narrow enough to execute.
+          required: true
