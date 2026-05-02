@@ -60,7 +60,7 @@ Create or update:
 - `docs/SYSTEM_DESIGN.md`
 - `docs/TESTING.md`
 - `docs/SECURITY_PRIVACY.md`
-- `docs/OPERATIONS.md`
+- `docs/OPERATIONS.md`, including an "Independent Local Caching" strategy
 - `docs/ANALYTICS.md`
 - `docs/PROJECT_MANAGEMENT.md`
 - `docs/USER_GUIDE.md`
@@ -90,6 +90,7 @@ Issue templates must remind contributors not to include secrets, private notes, 
 - hard constraints
 - agent workflow
 - public planning boundary
+- model agnosticism and abstraction layer
 - privacy and security reminders
 
 Example public planning boundary:
@@ -101,6 +102,16 @@ Example public planning boundary:
 - Keep private planning systems, local ticket folders, personal notes, and unpublished operational context outside Git.
 - Do not commit private planning exports, personal task systems, local ticket folders, local vault metadata, secrets, or provider credentials.
 - Use public GitHub issues for public roadmap items and implementation work that is safe to disclose.
+```
+
+Example model abstraction boundary:
+
+```md
+## Model Agnosticism And Abstraction Layer
+
+- Route all LLM calls through a vendor-neutral proxy or OpenAI-compatible interface, such as LiteLLM or an internal model gateway.
+- Select the active provider and model from `.env` values so models can be hot-swapped without source changes if a provider becomes hostile, unreliable, or cost-prohibitive.
+- Do not call proprietary model SDKs directly from product code unless they are wrapped behind the shared provider abstraction.
 ```
 
 ## Guardrails
@@ -118,6 +129,11 @@ Configure as much as is appropriate for the stack:
 - public workflow check
 - agent-ready check
 - dead-code or dependency scan
+- agent sandbox ignore rules that exclude `.git/`, `.cursor/`, `.zsh_history`, and `.bash_history`
+
+Create or update `.gitignore`, `.agentignore` when supported, and `.agent-ready-report.json` when generated so local version-control metadata, editor-agent state, and shell history stay outside the agent context. These files must include `.git/`, `.cursor/`, `.zsh_history`, and `.bash_history`.
+
+`docs/OPERATIONS.md` must explicitly document an "Independent Local Caching" strategy. Do not rely solely on an LLM provider's ephemeral API cache. Require a local caching layer, such as Redis, SQLite, or local JSON, for reusable file embeddings, summaries, and other expensive context artifacts so token burn remains controlled if a provider reduces server-side cache TTLs.
 
 Checks should be documented in `docs/TESTING.md` and `README.md`.
 
@@ -141,6 +157,9 @@ Create `docs/SECURITY_PRIVACY.md` with:
 - analytics restrictions
 - provider credential restrictions
 - public repo privacy boundaries
+- outbound payload auditing (Network Transparency)
+
+The security documentation must require a local network proxy or interceptor, such as mitmproxy, or a dry-run logging mode that records outbound model-request JSON. Developers must be able to visually audit the exact prompts and injected context leaving the machine, confirming that hidden git status, shell history, and unapproved files are not being exfiltrated.
 
 Never commit:
 
@@ -152,6 +171,7 @@ Never commit:
 - sensitive infrastructure coordinates
 - private planning exports
 - generated local reports that include usernames or local paths
+- shell history files and local `.git` metadata
 
 ## Final Implementation Prompt
 
