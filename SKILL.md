@@ -17,6 +17,7 @@ The finished repository should include:
 - strict implementation boundaries
 - local development commands
 - linting, formatting, tests, and build checks
+- a standard eval harness for AI, retrieval, caching, and privacy-sensitive behavior
 - public GitHub Issues and Pull Request workflow
 - privacy and public-safety guardrails
 - `AGENTS.md` for future agents
@@ -59,6 +60,7 @@ Create or update:
 - `docs/PRODUCT_SCOPE.md`
 - `docs/SYSTEM_DESIGN.md`
 - `docs/TESTING.md`
+- `docs/EVALS.md`
 - `docs/SECURITY_PRIVACY.md`
 - `docs/OPERATIONS.md`, including an "Independent Local Caching" strategy
 - `docs/ANALYTICS.md`
@@ -89,6 +91,7 @@ Issue templates must remind contributors not to include secrets, private notes, 
 - sources of truth
 - hard constraints
 - agent workflow
+- eval workflow and required `run-evals` command
 - public planning boundary
 - model agnosticism and abstraction layer
 - privacy and security reminders
@@ -128,6 +131,7 @@ Configure as much as is appropriate for the stack:
 - privacy check
 - public workflow check
 - agent-ready check
+- eval runner
 - dead-code or dependency scan
 - agent sandbox ignore rules that exclude `.git/`, `.cursor/`, `.zsh_history`, and `.bash_history`
 
@@ -136,6 +140,37 @@ Create or update `.gitignore`, `.agentignore` when supported, and `.agent-ready-
 `docs/OPERATIONS.md` must explicitly document an "Independent Local Caching" strategy. Do not rely solely on an LLM provider's ephemeral API cache. Require a local caching layer, such as Redis, SQLite, or local JSON, for reusable file embeddings, summaries, and other expensive context artifacts so token burn remains controlled if a provider reduces server-side cache TTLs.
 
 Checks should be documented in `docs/TESTING.md` and `README.md`.
+
+## Standard Eval Harness
+
+Create a lightweight, stack-appropriate eval harness before product implementation. Prefer simple local files and scripts over a heavy framework unless the project already has an eval platform.
+
+Create or update:
+
+- `docs/EVALS.md`
+- `evals/README.md`
+- `evals/cases/` with JSONL, YAML, or Markdown eval cases
+- fixtures for representative inputs when needed
+- a `run-evals` command in the project scripts or task runner
+
+`docs/EVALS.md` must define:
+
+- what behavior is evaluated
+- how to add eval cases
+- pass/fail thresholds
+- how evals run locally and in CI
+- how failures should block prompt, retrieval, cache, provider, and agent workflow changes
+
+The baseline eval categories are:
+
+- functional evals for expected tool, agent, API, or UI behavior
+- privacy evals that reject `.git`, shell history, secrets, local paths, and unapproved files in outbound context
+- provider portability evals that run through the model abstraction layer
+- caching evals that prove reusable summaries, embeddings, or context artifacts are read from local cache when valid
+- prompt-injection evals for hostile instructions inside files, tickets, fetched pages, or retrieved context
+- outbound payload evals that verify dry-run or proxy logs expose the exact JSON prompts and injected context that would leave the machine
+
+Future agents must run evals before changing prompts, model/provider routing, retrieval, local caching, outbound payload construction, or privacy-sensitive agent behavior.
 
 ## Local Preview
 
@@ -185,6 +220,7 @@ It should include:
 - UI or API requirements
 - data model requirements
 - testing requirements
+- eval requirements and the required `run-evals` command
 - public workflow and privacy requirements
 - explicit instruction not to use private planning context
 
@@ -193,6 +229,7 @@ It should include:
 Before final response:
 
 - run format/lint/test/build where available
+- run evals where available
 - run public workflow and privacy checks where available
 - verify no private identifiers are present
 - summarize the files created

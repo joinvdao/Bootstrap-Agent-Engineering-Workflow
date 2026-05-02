@@ -1,0 +1,10 @@
+{
+  "name": "bootstrap-agent-engineering-workflow",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Reusable bootstrap workflow for AI-assisted engineering repositories.",
+  "scripts": {
+    "run-evals": "node scripts/run-evals.mjs",
+    "test": "node scripts/run-evals.mjs"
+  }
+}

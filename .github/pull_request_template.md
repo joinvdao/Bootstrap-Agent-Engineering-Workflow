@@ -10,6 +10,7 @@ Closes #
 
 - [ ] Prompt reviewed for public-safety and identifying details.
 - [ ] Generated workflow still includes docs, checks, CI, and public issue templates where applicable.
+- [ ] Eval harness requirements still include `docs/EVALS.md`, eval cases, and a `run-evals` command where applicable.
 
 ## Privacy
 

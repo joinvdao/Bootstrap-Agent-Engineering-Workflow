@@ -7,10 +7,10 @@ This is a public VDAO.io community resource. It prepares you for coding using an
 ## What It Does
 
 - Asks a compact set of product setup questions that work even with minimal answers.
-- Creates core docs: product scope, system design, testing, security/privacy, operations, analytics, user guide, project management, livestream/build notes, and agent instructions.
+- Creates core docs: product scope, system design, testing, evals, security/privacy, operations, analytics, user guide, project management, livestream/build notes, and agent instructions.
 - Sets up agent ergonomics with `AGENTS.md`, editor-safe workflow rules, and clear sources of truth.
 - Makes localhost work from the start with a documented dev command, localhost URL, and minimal visible app shell for web projects.
-- Sets up clean-code guardrails: linting, formatting, tests, pre-commit hooks, dead-code scans, public workflow checks, privacy checks, and agent-readiness checks.
+- Sets up clean-code guardrails: linting, formatting, tests, evals, pre-commit hooks, dead-code scans, public workflow checks, privacy checks, and agent-readiness checks.
 - Uses GitHub Issues and Pull Requests as the public ticketing system.
 - Configures CI and scheduled cleanup PRs so the repo stays clean over time.
 - Documents deployment expectations, including Vercel + GitHub setup when chosen.
@@ -26,6 +26,18 @@ This repo uses GitHub Issues as the public ticket system:
 - Livestream Follow-Up
 
 See `docs/PUBLIC_TICKETING.md`.
+
+## Evaluation Harness
+
+Bootstrapped projects should include a standard local eval harness with `docs/EVALS.md`, `evals/cases/`, and a `run-evals` command. The baseline covers functional behavior, privacy, provider portability, local caching, prompt injection, and outbound payload transparency.
+
+This repo also includes a small no-dependency eval runner for the bootstrap prompt itself:
+
+```sh
+npm run run-evals
+```
+
+See `docs/EVALS.md`.
 
 ## How To Use
 
