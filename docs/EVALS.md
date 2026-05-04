@@ -10,6 +10,31 @@ Every bootstrapped project should include a small, repeatable eval harness for A
 - Fixtures as needed for representative files, prompts, retrieved context, API payloads, or cached artifacts.
 - A `run-evals` command exposed through the repo's package scripts, Makefile, task runner, or equivalent command surface.
 
+## Case Types
+
+File cases inspect one repo-relative file:
+
+```json
+{
+  "id": "skill-requires-evals",
+  "file": "SKILL.md",
+  "includes": ["run-evals"],
+  "excludes": ["private marker"]
+}
+```
+
+Repo-wide cases inspect text files across the repository:
+
+```json
+{
+  "id": "public-repo-excludes-private-context",
+  "scope": "repo",
+  "excludes": ["private marker"]
+}
+```
+
+Repo-wide scans skip `.git`, local agent/editor state, dependencies, build outputs, coverage, env files, generated reports, lockfiles, and eval case definitions. Failure output should use repo-relative paths only.
+
 ## Baseline Eval Categories
 
 - Functional evals: confirm expected tool, agent, API, or UI behavior.
@@ -25,6 +50,7 @@ Every bootstrapped project should include a small, repeatable eval harness for A
 - Evals should be deterministic where practical and should fail closed when privacy assertions are inconclusive.
 - CI should run the eval suite when the project includes AI, retrieval, provider, cache, or agent workflow code.
 - The harness should avoid vendor lock-in. Use a vendor-neutral model gateway, OpenAI-compatible interface, local dry-run mode, or recorded fixtures for repeatable checks.
+- `evalroom` or a similar richer harness may be added as an optional adapter, but the required public baseline remains `npm run run-evals`.
 
 ## Suggested Case Shape
 

@@ -13,8 +13,17 @@ The harness is intentionally small and dependency-free. Cases live in `evals/cas
 Each JSONL line should include:
 
 - `id`: stable eval identifier
-- `file`: repository-relative file to inspect
+- `file`: repository-relative file to inspect, unless using `scope: "repo"`
+- `scope`: optional; use `"repo"` to scan text files across the repository
 - `includes`: required strings
 - `excludes`: forbidden strings, when useful
 
 Prefer precise strings that represent durable requirements instead of broad prose fragments.
+
+Repo-wide scans skip `.git`, local agent/editor state, dependencies, build outputs, coverage, env files, generated reports, lockfiles, and eval case definitions so public privacy checks can define forbidden markers without matching themselves.
+
+`evalroom` integrations should stay optional. The required baseline is always:
+
+```sh
+npm run run-evals
+```
