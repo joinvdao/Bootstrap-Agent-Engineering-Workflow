@@ -35,6 +35,8 @@ Repo-wide cases inspect text files across the repository:
 
 Repo-wide scans skip `.git`, local agent/editor state, dependencies, build outputs, coverage, env files, generated reports, lockfiles, and eval case definitions. Failure output should use repo-relative paths only.
 
+Use `excludesCodepoints` for forbidden strings that should be enforced without storing the literal text in the public repo.
+
 ## Baseline Eval Categories
 
 - Functional evals: confirm expected tool, agent, API, or UI behavior.

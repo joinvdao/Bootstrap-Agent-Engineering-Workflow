@@ -17,6 +17,7 @@ Each JSONL line should include:
 - `scope`: optional; use `"repo"` to scan text files across the repository
 - `includes`: required strings
 - `excludes`: forbidden strings, when useful
+- `excludesCodepoints`: optional forbidden strings encoded as codepoint arrays when the literal text should not appear in the repo
 
 Prefer precise strings that represent durable requirements instead of broad prose fragments.
 

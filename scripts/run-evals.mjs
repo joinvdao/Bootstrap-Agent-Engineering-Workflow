@@ -199,6 +199,27 @@ function stringList(testCase, field) {
   return value;
 }
 
+function codepointList(testCase, field) {
+  const value = testCase[field] ?? [];
+
+  if (
+    !Array.isArray(value) ||
+    value.some(
+      (item) =>
+        !Array.isArray(item) ||
+        item.some((codepoint) => !Number.isInteger(codepoint) || codepoint < 0),
+    )
+  ) {
+    throw new Error(`${testCase.id} ${field} must be an array of codepoint arrays`);
+  }
+
+  return value.map((item) => String.fromCodePoint(...item));
+}
+
+function forbiddenStrings(testCase) {
+  return [...stringList(testCase, 'excludes'), ...codepointList(testCase, 'excludesCodepoints')];
+}
+
 function assertContent(content, testCase, label) {
   const failures = [];
 
@@ -208,7 +229,7 @@ function assertContent(content, testCase, label) {
     }
   }
 
-  for (const forbidden of stringList(testCase, 'excludes')) {
+  for (const forbidden of forbiddenStrings(testCase)) {
     if (content.includes(forbidden)) {
       failures.push(`${label} contains forbidden text: ${forbidden}`);
     }
@@ -247,7 +268,7 @@ async function runRepoCase(testCase) {
     }
   }
 
-  for (const forbidden of stringList(testCase, 'excludes')) {
+  for (const forbidden of forbiddenStrings(testCase)) {
     for (const { file, content } of snapshots) {
       if (content.includes(forbidden)) {
         failures.push(`${file} contains forbidden text: ${forbidden}`);
