@@ -1,6 +1,6 @@
 ---
 name: agentic-engineering-repo-bootstrap
-description: Bootstrap or harden a public-safe software repository for AI-assisted engineering. Use when starting a new project or improving an existing repo before feature implementation: ask setup questions, create product/system/testing/security/operations/analytics docs, configure local preview, clean-code guardrails, agent-readiness checks, public GitHub Issues workflow, CI, deployment notes, and a final implementation prompt for user approval.
+description: Bootstrap or harden a public-safe software repository for AI-assisted engineering. Use when starting a new project or improving an existing repo before feature implementation: ask setup questions, create product/system/testing/security/operations/analytics docs, configure optional repo-local sprint tickets, local preview, clean-code guardrails, agent-readiness checks, public GitHub Issues workflow, CI, deployment notes, and a final implementation prompt for user approval.
 ---
 
 # Agentic Engineering Repo Bootstrap Prompt
@@ -19,6 +19,7 @@ The finished repository should include:
 - linting, formatting, tests, and build checks
 - a standard eval harness for AI, retrieval, caching, and privacy-sensitive behavior
 - public GitHub Issues and Pull Request workflow
+- optional repo-local sprint ticket workflow for goals and multi-step execution
 - privacy and public-safety guardrails
 - `AGENTS.md` for future agents
 - CI for repeatable validation
@@ -39,12 +40,15 @@ Ask these questions first. If the user gives minimal answers, make conservative 
 9. What public work-tracking style should be used? Default: GitHub Issues and Pull Requests.
 10. What should the first implementation prompt ask a future agent to build?
 
+If the user wants multi-step sprint execution, create a public-safe repo-local sprint ticket workflow. Default to documenting the workflow without creating active tickets unless the user asks for an initial sprint.
+
 ## Public-Safe Defaults
 
 When the repo is public or might become public:
 
 - Use GitHub Issues as the public ticketing system.
 - Add issue templates for bug reports, feature requests, engineering tasks, and livestream/build-session follow-ups where relevant.
+- Add `docs/TICKETS.md` for optional repo-local sprint tickets that break public-safe goals into executable steps.
 - Add a pull request template with validation and privacy sections.
 - Add `docs/PROJECT_MANAGEMENT.md` describing the public issue workflow.
 - Add a privacy check that blocks local paths, emails, private notes, secrets, and personal details where practical.
@@ -65,6 +69,7 @@ Create or update:
 - `docs/OPERATIONS.md`, including an "Independent Local Caching" strategy
 - `docs/ANALYTICS.md`
 - `docs/PROJECT_MANAGEMENT.md`
+- `docs/TICKETS.md`
 - `docs/USER_GUIDE.md`
 - `docs/LIVESTREAM.md` when the project is built in public
 - `docs/IMPLEMENTATION_PROMPT.md`
@@ -82,6 +87,34 @@ When using GitHub Issues, create:
 
 Issue templates must remind contributors not to include secrets, private notes, exact local paths, personal contact details, private addresses, or sensitive records.
 
+## Repo-Local Sprint Tickets
+
+When the project needs a multi-step execution plan, create or update `docs/TICKETS.md` and, when requested, a `.tickets/` folder.
+
+Sprint tickets should model:
+
+- sprint goal
+- scope and non-scope
+- ordered implementation steps
+- acceptance criteria
+- validation commands
+- blockers and follow-up decisions
+- links to public GitHub Issues and pull requests when available
+
+Use this structure when creating active sprint tickets:
+
+```text
+.tickets/
+  README.md
+  sprints/
+    <sprint-slug>/
+      SPRINT.md
+      STEP-001-<short-title>.md
+      STEP-002-<short-title>.md
+```
+
+Ticket files must be public-safe. Do not include private planning context, personal notes, secrets, exact local paths, private addresses, real user data, unpublished agreements, or security-sensitive infrastructure details. GitHub Issues remain the public roadmap and contribution surface; repo-local sprint tickets are execution breakdowns for a specific sprint.
+
 ## AGENTS.md Requirements
 
 `AGENTS.md` should include:
@@ -92,6 +125,7 @@ Issue templates must remind contributors not to include secrets, private notes, 
 - hard constraints
 - agent workflow
 - eval workflow and required `run-evals` command
+- sprint ticket workflow when repo-local tickets are enabled
 - public planning boundary
 - model agnosticism and abstraction layer
 - privacy and security reminders
@@ -115,6 +149,17 @@ Example model abstraction boundary:
 - Route all LLM calls through a vendor-neutral proxy or OpenAI-compatible interface, such as LiteLLM or an internal model gateway.
 - Select the active provider and model from `.env` values so models can be hot-swapped without source changes if a provider becomes hostile, unreliable, or cost-prohibitive.
 - Do not call proprietary model SDKs directly from product code unless they are wrapped behind the shared provider abstraction.
+```
+
+Example sprint ticket boundary:
+
+```md
+## Sprint Ticket Boundary
+
+- Use repo-local sprint tickets only for public-safe execution breakdowns.
+- Keep public roadmap discussion in GitHub Issues and pull requests.
+- Each sprint needs a goal, scoped steps, acceptance criteria, and validation commands.
+- Do not put private planning context, secrets, exact local paths, real user data, or sensitive operational details in tickets.
 ```
 
 ## Guardrails
@@ -221,6 +266,7 @@ It should include:
 - data model requirements
 - testing requirements
 - eval requirements and the required `run-evals` command
+- sprint ticket requirements when the implementation is split into multiple steps
 - public workflow and privacy requirements
 - explicit instruction not to use private planning context
 

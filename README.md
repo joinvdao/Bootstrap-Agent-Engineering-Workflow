@@ -12,6 +12,7 @@ This is a public VDAO.io community resource. It prepares you for coding using an
 - Makes localhost work from the start with a documented dev command, localhost URL, and minimal visible app shell for web projects.
 - Sets up clean-code guardrails: linting, formatting, tests, evals, pre-commit hooks, dead-code scans, public workflow checks, privacy checks, and agent-readiness checks.
 - Uses GitHub Issues and Pull Requests as the public ticketing system.
+- Adds an optional repo-local sprint ticket workflow for goals, scoped steps, acceptance criteria, and validation.
 - Configures CI and scheduled cleanup PRs so the repo stays clean over time.
 - Documents deployment expectations, including Vercel + GitHub setup when chosen.
 - Produces a final implementation prompt for the user to review before product build begins.
@@ -26,6 +27,12 @@ This repo uses GitHub Issues as the public ticket system:
 - Livestream Follow-Up
 
 See `docs/PUBLIC_TICKETING.md`.
+
+## Sprint Tickets
+
+For multi-step implementation work, bootstrapped projects can use optional repo-local sprint tickets alongside GitHub Issues. The workflow turns a public-safe goal into a sprint with ordered steps, acceptance criteria, and validation commands.
+
+See `docs/TICKETS.md`.
 
 ## Evaluation Harness
 

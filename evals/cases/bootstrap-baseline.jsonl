@@ -5,4 +5,7 @@
 {"id":"shared-baseline-requires-eval-command","file":"package.json","includes":["\"run-evals\"","node scripts/run-evals.mjs"]}
 {"id":"shared-baseline-requires-agentignore-sandbox","file":".agentignore","includes":[".git/",".cursor/",".zsh_history",".bash_history"]}
 {"id":"eval-doc-keeps-evalroom-optional","file":"docs/EVALS.md","includes":["`evalroom` or a similar richer harness may be added as an optional adapter","the required public baseline remains `npm run run-evals`"]}
+{"id":"skill-requires-public-sprint-ticket-workflow","file":"SKILL.md","includes":["## Repo-Local Sprint Tickets","sprint goal","ordered implementation steps","acceptance criteria","validation commands","Ticket files must be public-safe"]}
+{"id":"tickets-doc-defines-sprint-steps","file":"docs/TICKETS.md","includes":["# Sprint Tickets","## Suggested Structure","SPRINT.md","STEP-001","## Acceptance Criteria","## Privacy Rules","## Agent Workflow"]}
+{"id":"readme-links-sprint-tickets","file":"README.md","includes":["## Sprint Tickets","See `docs/TICKETS.md`."]}
 {"id":"public-repo-excludes-private-context-markers","scope":"repo","excludesCodepoints":[[66,117,105,108,100,105,110,103,32,65,98,117,110,100,97,110,99,101],[98,117,105,108,100,105,110,103,32,97,98,117,110,100,97,110,99,101],[79,66,83,73,68,73,65,78,95,71,84,68,95,84,73,67,75,69,84,83,95,83,69,84,85,80,46,109,100],[79,98,115,105,100,105,97,110,32,71,84,68],[116,105,99,107,101,116,115,45,109,100],[48,120,107,114,105],[67,58,92,85,115,101,114,115,92]]}
