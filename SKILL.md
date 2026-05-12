@@ -1,6 +1,6 @@
 ---
 name: agentic-engineering-repo-bootstrap
-description: Bootstrap or harden a public-safe software repository for AI-assisted engineering. Use when starting a new project or improving an existing repo before feature implementation: ask setup questions, create product/system/testing/security/operations/analytics docs, configure optional repo-local sprint tickets, local preview, clean-code guardrails, agent-readiness checks, public GitHub Issues workflow, CI, deployment notes, and a final implementation prompt for user approval.
+description: Bootstrap or harden a public-safe software repository for AI-assisted engineering. Use when starting a new project or improving an existing repo before feature implementation: ask setup questions, create product/system/testing/security/operations/analytics docs, configure optional repo-local sprint tickets, add model-agnostic goal/loop mode guidance including Codex `/goal` usage when available, add passive dream audit sweeps for stale docs, doc/code drift, TODOs, and missing tests, local preview, clean-code guardrails, agent-readiness checks, public GitHub Issues workflow, CI, deployment notes, and a final implementation prompt for user approval.
 ---
 
 # Agentic Engineering Repo Bootstrap Prompt
@@ -20,6 +20,7 @@ The finished repository should include:
 - a standard eval harness for AI, retrieval, caching, and privacy-sensitive behavior
 - public GitHub Issues and Pull Request workflow
 - optional repo-local sprint ticket workflow for goals and multi-step execution
+- passive dream audit workflow for no-edits stale-doc, doc/code drift, missing-test, and TODO review queues
 - privacy and public-safety guardrails
 - `AGENTS.md` for future agents
 - CI for repeatable validation
@@ -41,6 +42,8 @@ Ask these questions first. If the user gives minimal answers, make conservative 
 10. What should the first implementation prompt ask a future agent to build?
 
 If the user wants multi-step sprint execution, create a public-safe repo-local sprint ticket workflow. Default to documenting the workflow without creating active tickets unless the user asks for an initial sprint.
+
+Always include goal/loop mode guidance in the generated `AGENTS.md` and `docs/TICKETS.md`. If the environment supports Codex `/goal`, document a Codex-ready launch pattern. If it does not, document the same workflow as a model-agnostic loop prompt. Do not make goal mode depend on Codex-only tooling.
 
 ## Public-Safe Defaults
 
@@ -65,6 +68,7 @@ Create or update:
 - `docs/SYSTEM_DESIGN.md`
 - `docs/TESTING.md`
 - `docs/EVALS.md`
+- `docs/GOAL_MODE.md`
 - `docs/SECURITY_PRIVACY.md`
 - `docs/OPERATIONS.md`, including an "Independent Local Caching" strategy
 - `docs/ANALYTICS.md`
@@ -98,6 +102,7 @@ Sprint tickets should model:
 - ordered implementation steps
 - acceptance criteria
 - validation commands
+- goal/loop mode tracking files and Codex `/goal` launch guidance when supported
 - blockers and follow-up decisions
 - links to public GitHub Issues and pull requests when available
 
@@ -115,6 +120,101 @@ Use this structure when creating active sprint tickets:
 
 Ticket files must be public-safe. Do not include private planning context, personal notes, secrets, exact local paths, private addresses, real user data, unpublished agreements, or security-sensitive infrastructure details. GitHub Issues remain the public roadmap and contribution surface; repo-local sprint tickets are execution breakdowns for a specific sprint.
 
+## Goal / Loop Mode Baseline
+
+Create goal/loop guidance in `AGENTS.md` and `docs/TICKETS.md`, even when active tickets are not created yet. This guidance must work for Codex, Claude, GLM, Qwen, MiniMax, and other agents. Codex may use `/goal`, but the underlying pattern must be portable.
+
+Also create `docs/GOAL_MODE.md` as the source of truth for long-running goal loops, manager-agent swarms, eval integrity, and anti-gaming rules.
+
+Goal/loop guidance must require:
+
+- a clear quantitative or checklist-based goal
+- the current baseline or starting state when measurable
+- explicit scope and non-scope
+- acceptance criteria that can be checked off
+- validation commands or scoring scripts
+- a fast feedback loop, such as targeted tests, evals, fixtures, small datasets, benchmarks, or smoke tests
+- a time, token, cost, or iteration ceiling
+- stop conditions for success, impossibility, or escalation
+- repo-local progress files that survive context compaction
+- telos: the real purpose the loop serves, not just the visible task
+- checkpoint intervals, usually 30 minutes to 24 hours depending on feedback quality
+- manager-agent feedback when multiple agents or branches are exploring in parallel
+- anti-p-hacking and anti-metric-gaming rules when leaderboards, evals, or benchmarks are the scoreboard
+
+Recommended files for a long-running loop:
+
+```text
+GOAL.md              measurable target, baseline, constraints, stop conditions
+PLAN.md              current strategy and ordered work plan
+EXPERIMENTS.md       curated list of attempts, changes, scores, and outcomes
+EXPERIMENT_NOTES.md  chronological scratchpad and observations
+FEEDBACK.md          manager or reviewer feedback for course correction
+SUSPECTED_P_HACKS.md optional log for leaderboard/eval gaming concerns
+```
+
+When repo-local sprint tickets are enabled, place these files inside the active sprint folder or fold the same sections into `SPRINT.md` and `STEP-*.md` files.
+
+Include a Codex-ready example like:
+
+```text
+/goal Achieve <quantitative target> in <scope> without regressing <tests/evals>. Before editing, create or update GOAL.md, PLAN.md, EXPERIMENTS.md, and EXPERIMENT_NOTES.md. Use <validation command> as the scoring loop. Stop only when all acceptance criteria are checked off and validation passes, or when the documented stop condition is reached.
+```
+
+Also include a model-agnostic version:
+
+```text
+Loop until <quantitative target> is met in <scope> without regressing <tests/evals>. Persist progress in GOAL.md, PLAN.md, EXPERIMENTS.md, and EXPERIMENT_NOTES.md. Use <validation command> after each meaningful change. Stop when all acceptance criteria pass or when the documented ceiling/blocker is reached.
+```
+
+## Passive Dream Audit Baseline
+
+Add a passive dream-audit workflow to `AGENTS.md`, `docs/OPERATIONS.md`, and `docs/TICKETS.md`. This workflow is adapted from the public `weikengchen/claude-code-dream-skill` pattern, but it must remain model-agnostic and safe for Codex, Claude, GLM, Qwen, MiniMax, and other agents.
+
+The dream audit is a no-edits maintenance sweep. It must flag concerns into a review queue, not change source files.
+
+Dream audit guidance must include:
+
+- the trigger examples: "dream on this repo", "run a passive audit", "find doc/code drift", "find stale TODOs", and "find missing tests"
+- no source edits during the dream pass
+- a resumable `.dream/` state folder at the repo root
+- `.dream/` in `.gitignore` and `.agentignore`
+- scope rules that respect `.gitignore`, `.agentignore`, dependencies, build outputs, generated files, env files, local metadata, and large/binary files
+- staged workflow: inventory, scout, pair scout, filter, final review
+- model roles instead of vendor names: cheap scout, stronger filter, strongest reviewer
+- provider abstraction for all model calls, using the project's model gateway when one exists
+- cost ceilings, max scout counts, batch sizes, and resumability rules
+- final output at `.dream/review.md`
+
+Use this state layout:
+
+```text
+.dream/
+  manifest.json
+  queue.json
+  pairs.json
+  findings/
+  filtered/
+  review.md
+  log.md
+  status.json
+```
+
+The final review queue should group findings by theme and severity, include quiet zones, list skipped files, and provide suggested actions. It should not open PRs, edit files, or decide product priorities. Acting on the queue is a separate sprint or implementation session.
+
+When adding scripts, prefer simple local commands such as:
+
+```json
+{
+  "scripts": {
+    "dream:audit": "node scripts/dream-audit.mjs",
+    "dream:review": "node scripts/dream-review.mjs"
+  }
+}
+```
+
+If scripts are not implemented during bootstrap, document the dream audit procedure and expected state files so a future agent can add them without rediscovering the pattern.
+
 ## AGENTS.md Requirements
 
 `AGENTS.md` should include:
@@ -129,6 +229,9 @@ Ticket files must be public-safe. Do not include private planning context, perso
 - public planning boundary
 - model agnosticism and abstraction layer
 - privacy and security reminders
+- goal/loop execution workflow, including Codex `/goal` guidance when supported and model-agnostic loop prompts otherwise
+- passive dream audit workflow for no-edits stale-doc, doc/code drift, missing-test, TODO, and cruft review queues
+- goal-mode autonomy horizon, telos, checkpoint, manager-agent, and anti-metric-gaming rules from `docs/GOAL_MODE.md`
 
 Example public planning boundary:
 
@@ -162,6 +265,24 @@ Example sprint ticket boundary:
 - Do not put private planning context, secrets, exact local paths, real user data, or sensitive operational details in tickets.
 ```
 
+Example goal/loop boundary:
+
+```md
+## Goal And Loop Mode
+
+- Use goal/loop mode only for work with a measurable target, clear constraints, and a fast validation loop.
+- Write a `GOAL.md` or sprint `SPRINT.md` before starting long-running work. Include the quantitative target, baseline, acceptance criteria, validation commands, time or budget ceiling, and stop conditions.
+- Keep progress in repo-local markdown files such as `PLAN.md`, `EXPERIMENTS.md`, and `EXPERIMENT_NOTES.md`, or in the active sprint ticket files when repo-local tickets are enabled.
+- Check off acceptance criteria as they become true so progress survives model context compaction.
+- Stop when all acceptance criteria pass, when validation proves the target is impossible under the constraints, or when the time/budget ceiling is reached. In blocked cases, write the blocker and next decision needed.
+- For Codex, a launch prompt may begin with `/goal`. For other agents, use the same content as a normal loop prompt.
+- Do not use vague goals such as "improve the code." Use measurable goals such as "reduce `specific_file` runtime by 20% while `npm test` and `npm run run-evals` pass."
+- Write the telos at the top of the goal: the real purpose the loop serves, not just the visible task.
+- Re-ground at explicit checkpoints. A single-agent unattended loop should usually checkpoint within 30 minutes to 24 hours depending on feedback quality.
+- For broad search spaces, prefer breadth/selection/depth: multiple bounded attempts, a manager/reviewer to compare artifacts and scores, then focused integration of the best ideas.
+- When a leaderboard, benchmark, or eval is the scoreboard, document anti-p-hacking rules, holdout checks where possible, and suspicious metric-gaming concerns.
+```
+
 ## Guardrails
 
 Configure as much as is appropriate for the stack:
@@ -178,9 +299,9 @@ Configure as much as is appropriate for the stack:
 - agent-ready check
 - eval runner
 - dead-code or dependency scan
-- agent sandbox ignore rules that exclude `.git/`, `.cursor/`, `.zsh_history`, and `.bash_history`
+- agent sandbox ignore rules that exclude `.git/`, `.cursor/`, `.dream/`, `.zsh_history`, and `.bash_history`
 
-Create or update `.gitignore`, `.agentignore` when supported, and `.agent-ready-report.json` when generated so local version-control metadata, editor-agent state, and shell history stay outside the agent context. These files must include `.git/`, `.cursor/`, `.zsh_history`, and `.bash_history`.
+Create or update `.gitignore`, `.agentignore` when supported, and `.agent-ready-report.json` when generated so local version-control metadata, editor-agent state, shell history, and dream-audit state stay outside the agent context. These files must include `.git/`, `.cursor/`, `.dream/`, `.zsh_history`, and `.bash_history`.
 
 `docs/OPERATIONS.md` must explicitly document an "Independent Local Caching" strategy. Do not rely solely on an LLM provider's ephemeral API cache. Require a local caching layer, such as Redis, SQLite, or local JSON, for reusable file embeddings, summaries, and other expensive context artifacts so token burn remains controlled if a provider reduces server-side cache TTLs.
 

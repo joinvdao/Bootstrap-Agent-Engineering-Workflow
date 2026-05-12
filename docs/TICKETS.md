@@ -15,6 +15,81 @@ Use sprint tickets to capture:
 
 Public GitHub Issues remain the shared roadmap and contribution surface. Repo-local sprint tickets are the working breakdown for a specific sprint or implementation pass.
 
+## Goal / Loop Mode
+
+Sprint tickets are the preferred place to prepare long-running agent loops. A loop-ready sprint should include:
+
+- a quantitative or checklist-based goal
+- the current baseline when measurable
+- explicit scope and non-scope
+- acceptance criteria that can be checked off
+- validation commands or scoring scripts
+- a fast feedback loop, such as targeted tests, evals, smoke tests, fixtures, benchmarks, or small datasets
+- a time, token, cost, or iteration ceiling
+- stop conditions for success, impossibility, or escalation
+
+Use `docs/GOAL_MODE.md` as the deeper source of truth for autonomy horizons, telos, manager-agent feedback, breadth/selection/depth swarms, and anti-metric-gaming rules.
+
+For Codex, the sprint can be launched with `/goal` when available:
+
+```text
+/goal Achieve <target> in <scope> without regressing <tests/evals>. Use this sprint's SPRINT.md and STEP files as the source of truth. Update progress after each meaningful attempt. Stop when all acceptance criteria pass or when the documented ceiling/blocker is reached.
+```
+
+For other agents, use the same content as a normal loop prompt:
+
+```text
+Loop until <target> is achieved in <scope> without regressing <tests/evals>. Use this sprint's SPRINT.md and STEP files as the source of truth. Update progress after each meaningful attempt. Stop when all acceptance criteria pass or when the documented ceiling/blocker is reached.
+```
+
+For research-heavy or optimization-heavy goals, add these files inside the sprint folder:
+
+```text
+GOAL.md
+PLAN.md
+EXPERIMENTS.md
+EXPERIMENT_NOTES.md
+```
+
+Do not use goal/loop mode for vague requests such as "make the app better." Rewrite them as measurable targets or checklist completion goals first.
+
+When a sprint uses a leaderboard, eval, benchmark, or other scoreboard, add a short eval-integrity section to `SPRINT.md` or `EXPERIMENTS.md` covering holdouts, leakage risks, suspicious improvements, and anti-p-hacking rules.
+
+## Dream Audit Tickets
+
+Use a dream audit when the goal is to notice maintenance drift without changing source files. A dream audit is a passive, resumable sweep that writes state to `.dream/` and produces a review queue at `.dream/review.md`.
+
+Good triggers:
+
+- `dream on this repo`
+- `run a passive audit`
+- `find doc/code drift`
+- `find stale TODOs`
+- `find missing tests`
+
+Dream audit stages:
+
+1. Inventory files in scope while respecting `.gitignore`, `.agentignore`, dependencies, build outputs, env files, generated files, large files, and binaries.
+2. Scout each file for stale TODOs, doc/code drift, missing tests, dead references, confusing code, and undocumented public APIs.
+3. Pair-scout docs against related code and code against likely tests.
+4. Filter noisy findings with a stronger review pass.
+5. Write grouped findings, quiet zones, skipped files, and suggested actions to `.dream/review.md`.
+
+Agents must not edit source files during the dream pass. Acting on dream findings should become a separate sprint, issue, or implementation prompt.
+
+Recommended state files:
+
+```text
+.dream/manifest.json
+.dream/queue.json
+.dream/pairs.json
+.dream/findings/
+.dream/filtered/
+.dream/review.md
+.dream/log.md
+.dream/status.json
+```
+
 ## Suggested Structure
 
 ```text

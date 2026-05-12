@@ -54,6 +54,19 @@ Use `excludesCodepoints` for forbidden strings that should be enforced without s
 - The harness should avoid vendor lock-in. Use a vendor-neutral model gateway, OpenAI-compatible interface, local dry-run mode, or recorded fixtures for repeatable checks.
 - `evalroom` or a similar richer harness may be added as an optional adapter, but the required public baseline remains `npm run run-evals`.
 
+## Eval Integrity
+
+When evals, benchmarks, or leaderboards become the scoreboard for long-running goal loops, protect the score from being gamed:
+
+- keep holdout or hidden evals where possible
+- prevent validation data from leaking into prompts, fixtures, heuristics, or training data
+- reject hardcoded answers to public eval cases
+- require ablations or repeat runs for surprising improvements
+- compare against multiple seeds, fixtures, datasets, or representative slices when practical
+- record suspected metric gaming in `EXPERIMENTS.md` or `SUSPECTED_P_HACKS.md`
+
+Do not reward a higher score if the method violates the telos, privacy boundary, provider boundary, or product constraints.
+
 ## Suggested Case Shape
 
 ```json

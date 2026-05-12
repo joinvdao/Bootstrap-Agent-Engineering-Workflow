@@ -13,6 +13,8 @@ This is a public VDAO.io community resource. It prepares you for coding using an
 - Sets up clean-code guardrails: linting, formatting, tests, evals, pre-commit hooks, dead-code scans, public workflow checks, privacy checks, and agent-readiness checks.
 - Uses GitHub Issues and Pull Requests as the public ticketing system.
 - Adds an optional repo-local sprint ticket workflow for goals, scoped steps, acceptance criteria, and validation.
+- Adds goal-mode doctrine for measurable `/goal` loops, telos, checkpointing, manager agents, eval integrity, and anti-metric-gaming.
+- Adds passive dream audit guidance for no-edits sweeps that surface stale docs, doc/code drift, missing tests, TODOs, and cruft into `.dream/review.md`.
 - Configures CI and scheduled cleanup PRs so the repo stays clean over time.
 - Documents deployment expectations, including Vercel + GitHub setup when chosen.
 - Produces a final implementation prompt for the user to review before product build begins.
@@ -33,6 +35,18 @@ See `docs/PUBLIC_TICKETING.md`.
 For multi-step implementation work, bootstrapped projects can use optional repo-local sprint tickets alongside GitHub Issues. The workflow turns a public-safe goal into a sprint with ordered steps, acceptance criteria, and validation commands.
 
 See `docs/TICKETS.md`.
+
+## Goal Mode
+
+Bootstrapped projects should document long-running agent loops with measurable goals, fast scoreboards, explicit stop conditions, checkpoint intervals, manager-agent feedback when useful, and eval-integrity protections.
+
+See `docs/GOAL_MODE.md`.
+
+## Dream Audits
+
+Bootstrapped projects can document a passive dream audit workflow: inventory the repo, scout for stale docs and drift, filter noisy findings, and write a review queue to `.dream/review.md` without editing source files.
+
+The pattern is adapted from `weikengchen/claude-code-dream-skill` and generalized for any capable coding agent.
 
 ## Evaluation Harness
 

@@ -1,4 +1,5 @@
 .agent-ready-report.json
+.dream/
 .git/
 .cursor/
 .zsh_history
